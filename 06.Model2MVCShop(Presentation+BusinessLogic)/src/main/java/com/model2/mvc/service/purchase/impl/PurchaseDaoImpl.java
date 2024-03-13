@@ -32,7 +32,8 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	@Override
 	public List<Purchase> getPurchaseList(Search search, String userId) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("search", search);
+		map.put("start", (search.getCurrentPage() - 1) * search.getPageSize() + 1);
+		map.put("end", search.getCurrentPage() * search.getPageSize());
 		map.put("userId", userId);
 		
 		return sqlSession.selectList("PurchaseMapper.getPurchaseList", map);
@@ -59,7 +60,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public int getTotalCount(Search search) throws Exception{
-		return sqlSession.selectOne("PurchaseMapper.getTotalCount", search);
+	public int getTotalCount(String userId) throws Exception{
+		return sqlSession.selectOne("PurchaseMapper.getTotalCount", userId);
 	}
 }

@@ -19,5 +19,5 @@ public interface PurchaseService {
 	
 	public void updateTranCode(Purchase purchase) throws Exception;
 	
-	public int getTotalCount(Search search) throws Exception;
+	public int getTotalCount(String userId) throws Exception;
 }

@@ -18,7 +18,6 @@
 		<result property="orderDate" 			column="order_data" 			jdbcType="NUMERIC"/>
 		<result property="divyDate" 			column="dlvy_date" 			jdbcType="NUMERIC"/>
 		<association property="purchaseProd" javaType="product">
-			<result property="prodNo" column="prod_no"/>
 			<result property="prodNo" 			column="prod_no" 			jdbcType="NUMERIC"/>
 			<result property="prodName"	column="prod_name" 	jdbcType="VARCHAR" />
 			<result property="prodDetail" 	column="prod_detail" 		jdbcType="VARCHAR" />
@@ -48,7 +47,7 @@
 		transaction(tran_no, prod_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, 
 							dlvy_request, tran_status_code, order_data, dlvy_date) 
 		VALUES(SEQ_TRANSACTION_TRAN_NO.NEXTVAL, #{purchaseProd.prodNo}, #{buyer.userId}, #{paymentOption}, 
-						#{receiverName}, #{receiverPhone}, #{divyAddr},  #{divyRequest}, #{tranCode}, SYSDATE, #{divyDate})
+						#{receiverName}, #{receiverPhone}, #{divyAddr},  #{divyRequest}, '1', SYSDATE, #{divyDate})
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
@@ -76,13 +75,24 @@
 		 
 	<!-- SQL : SELECT LIST -->
 	<select  id="getPurchaseList"  parameterType="hashMap"	resultMap="purchaseSelectMap">
-			SELECT tran_no, prod_no, buyer_id, TRIM(payment_option) PAYMENT_OPTION, receiver_name,
-						receiver_phone, demailaddr, dlvy_request, TRIM(tran_status_code) TRAN_STATUS_CODE, 
-	 					order_data, TO_CHAR(dlvy_date, 'YYYYMMDD') DLVY_DATE, 
-	  											u.user_name, u.cell_phone
-													FROM transaction t, users u
-													WHERE t.buyer_id = u.user_id
-													AND t.buyer_id = #{userId}
+			<![CDATA[
+			SELECT *
+			    FROM (
+			        SELECT inner_table.*, ROWNUM AS row_seq
+			        FROM (
+							SELECT tran_no, t.prod_no, buyer_id, TRIM(payment_option) PAYMENT_OPTION, receiver_name,
+										receiver_phone, demailaddr, dlvy_request, TRIM(t.tran_status_code) TRAN_STATUS_CODE, 
+					 					order_data, TO_CHAR(dlvy_date, 'YYYYMMDD') DLVY_DATE, 
+					  											u.user_name, u.cell_phone, p.prod_name
+																	FROM transaction t, users u, product p
+																	WHERE t.buyer_id = u.user_id
+																	AND t.prod_no = p.prod_no
+																	AND t.buyer_id = #{userId}
+					 ) inner_table
+			        WHERE ROWNUM <= #{end}
+			    )
+			    WHERE row_seq BETWEEN #{start} AND #{end}			
+			]]>
 	 </select>
 	
 	<update id="updateTranCodeByProd" parameterType="purchase">

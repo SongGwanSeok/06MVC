@@ -37,7 +37,7 @@ public class ProductController {
 	@Value("#{commonProperties['pageUnit']}") private int pageUnit;
 	@Value("#{commonProperties['pageSize']}") private int pageSize;
 	
-	@GetMapping("/addproductView.do")
+	@GetMapping("/addProductView.do")
 	public String addproductView() throws Exception {
 		return "forward:/product/addProductView.jsp";
 	}
@@ -60,13 +60,19 @@ public class ProductController {
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
+		if(search.getSearchKeyword() != null && !search.getSearchKeyword().equals("")) {
+			search.setSearchKeyword('%' + search.getSearchKeyword() + '%');
+		}
 		
 		Map<String, Object> map =  productService.getProductList(search);
 
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println(resultPage);
+		if(search.getSearchKeyword() != null) {
+			search.setSearchKeyword(search.getSearchKeyword().replace("%", ""));
+		}
 		
 		model.addAttribute("list", map.get("list"));
-		model.addAttribute("totalCount", map.get("totalCount"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 		model.addAttribute("menu", menu);
@@ -74,7 +80,7 @@ public class ProductController {
 		return "forward:/product/listProduct.jsp";
 	}
 	
-	@GetMapping("/getProduct.do")
+	@RequestMapping("/getProduct.do")
 	public String getProduct(@Param("prodNo") int prodNo, @Param("menu") String menu,
 																	Model model, @CookieValue(value = "history", required = false) String recent
 																	, HttpServletResponse response) throws Exception {
@@ -102,7 +108,7 @@ public class ProductController {
 		
 		productService.updateProduct(product);
 		
-		return "forward:/getProduct.do?menu=ok&prodNo="+product.getProdNo();
+		return "redirect:/getProduct.do?menu=ok&prodNo="+product.getProdNo();
 	}
 	
 	@GetMapping("/updateProductView.do")
