@@ -16,6 +16,9 @@
 		<result property="fileName" 			column="image_file" 		jdbcType="VARCHAR" />
 		<result property="regDate" 			column="reg_date" 				jdbcType="DATE" />
 		<result property="proTranCode" column="tran_code"			jdbcType="VARCHAR" />
+		<association property="category" javaType="category">
+			<result property="categoryName" 			column="category_name" 			jdbcType="NUMERIC"/>
+		</association>
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
@@ -48,41 +51,46 @@
 	 </update>
 		 
 	<!-- SQL : SELECT LIST -->
-	<select  id="getProductList"  parameterType="search"	resultMap="productSelectMap">
+	<select  id="getProductList"  parameterType="map"	resultMap="productSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT p.prod_no, p.prod_name , p.price , p.reg_date, TRIM(t.tran_status_code) tran_code
-											FROM product p, transaction t
+	  					FROM		(	SELECT p.prod_no, p.prod_name , p.price , p.reg_date, TRIM(t.tran_status_code) tran_code, c.category_name
+											FROM product p, transaction t, category c
 											WHERE p.prod_no = t.prod_no(+)
-											<if test="searchCondition != null">
-												<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				AND p.prod_no = #{searchKeyword}
+											AND p.category_no = c.category_no
+											<if test="search.searchCondition != null">
+												<if test="search.searchCondition == 0 and search.searchKeyword !='' ">
+										 				AND p.prod_no = #{search.searchKeyword}
 												</if>
-												<if test="searchCondition == 1 and searchKeyword !='' ">
-										 				AND p.prod_name LIKE #{searchKeyword}
+												<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
+										 				AND p.prod_name LIKE #{search.searchKeyword}
 												</if>
-												<if test="searchCondition == 2 and searchKeyword !='' and priceRange!='' ">
-										 				AND p.price BETWEEN #{searchKeyword} AND #{priceRange}
+												<if test="search.searchCondition == 2 and search.searchKeyword !='' and search.priceRange!='' ">
+										 				AND p.price BETWEEN #{search.searchKeyword} AND #{search.priceRange}
 												</if>
 											</if>
 											
-											<if test="orderStandard != null">
-												<if test="orderStandard == 'regDate' ">
+											<if test="categoryNo != 0">
+												 AND p.category_no=#{categoryNo}
+											</if>
+											
+											<if test="search.orderStandard != null">
+												<if test="search.orderStandard == 'regDate' ">
 													ORDER BY p.reg_date
 												</if>
-												<if test="orderStandard == 'lowPrice' ">
+												<if test="search.orderStandard == 'lowPrice' ">
 													ORDER BY p.price
 												</if>
-												<if test="orderStandard == 'highPrice' ">
+												<if test="search.orderStandard == 'highPrice' ">
 													ORDER BY p.price DESC
 												</if>
 											</if>
-											<if test="orderStandard == null">
+											<if test="search.orderStandard == null">
 												ORDER BY p.reg_date
 											</if>
 											 ) inner_table
-						WHERE ROWNUM &lt;= #{endRowNum} )
-		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+						WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
 	 </select>
 	
 	<!-- SQL : SELECT ROW Count -->	 

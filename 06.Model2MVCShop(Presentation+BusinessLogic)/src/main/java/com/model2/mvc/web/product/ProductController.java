@@ -78,8 +78,11 @@ public class ProductController {
 		if(search.getSearchKeyword() != null && search.getSearchKeyword().equals("1")) {
 			search.setSearchKeyword('%' + search.getSearchKeyword() + '%');
 		}
+		if(categoryNo == null) {
+			categoryNo = 0;
+		}
 		
-		Map<String, Object> map =  productService.getProductList(search);
+		Map<String, Object> map =  productService.getProductList(search, categoryNo);
 
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
 		System.out.println(resultPage);
@@ -87,7 +90,10 @@ public class ProductController {
 			search.setSearchKeyword(search.getSearchKeyword().replace("%", ""));
 		}
 		
+		Map<String, Object> categoryMap = categoryService.getCategoryList();
+		
 		model.addAttribute("list", map.get("list"));
+		model.addAttribute("categoryList", categoryMap.get("list"));
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 		model.addAttribute("menu", menu);

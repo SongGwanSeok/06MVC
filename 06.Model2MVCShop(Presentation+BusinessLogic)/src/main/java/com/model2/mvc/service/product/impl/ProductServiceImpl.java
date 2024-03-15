@@ -40,8 +40,8 @@ public class ProductServiceImpl implements ProductService{
 		return productDao.getProduct(prodNo);
 	}
 
-	public Map<String , Object > getProductList(Search search) throws Exception {
-		List<Product> list= productDao.getProductList(search);
+	public Map<String , Object > getProductList(Search search, int categoryNo) throws Exception {
+		List<Product> list= productDao.getProductList(search, categoryNo);
 		int totalCount = productDao.getTotalCount(search);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
