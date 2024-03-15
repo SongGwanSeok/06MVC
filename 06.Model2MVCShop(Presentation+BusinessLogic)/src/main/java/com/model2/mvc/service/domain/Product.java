@@ -13,6 +13,7 @@ public class Product {
 	private int prodNo;
 	private Date regDate;
 	private String proTranCode;
+	private Category category;
 	
 	public Product(){
 	}
@@ -71,5 +72,13 @@ public class Product {
 		return "ProductVO : [fileName]" + fileName
 				+ "[manuDate]" + manuDate+ "[price]" + price + "[prodDetail]" + prodDetail
 				+ "[prodName]" + prodName + "[prodNo]" + prodNo;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}	
 }

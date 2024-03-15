@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CategoryMapper">
+ 	
+ 	
+	<resultMap id="categorySelectMap" type="category">
+		<result property="categoryNo" 			column="category_no" 			jdbcType="NUMERIC"/>
+		<result property="categoryName"	column="category_name" 	jdbcType="VARCHAR" />
+		<result property="productCnt" column="product_cnt" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert 	id="addCategory"		parameterType="category" >
+	 	INSERT
+		INTO category
+		VALUES( SEQ_CATEGORY_CATEGORY_NO.NEXTVAL, #{categoryName})
+	 </insert>
+	 
+	 <!-- SQL : SELECT ONE -->
+	 <select 	id="getCategory"	parameterType="int"	resultMap="categorySelectMap">
+		SELECT
+		category_no, category_name	
+		FROM category
+		WHERE category_name = #{categoryNo}
+	 </select>
+	 
+	 <!-- SQL : UPDATE -->
+	 <update	id="updateCategory"	parameterType="category" >
+	   	UPDATE category
+	   	<set>
+			category_name = #{categoryName}
+	   	</set>
+	   	WHERE category_no = #{categoryNo}
+	 </update>
+		 
+	<!-- SQL : SELECT LIST -->
+	<select  id="getCategoryList" 	resultMap="categorySelectMap">
+	  	SELECT c.category_no, c.category_name, COUNT(p.prod_no) product_cnt
+	  	FROM category c, product p
+	  	WHERE c.category_no = p.category_no(+)
+	  	GROUP BY c.category_no, c.category_name
+	  	ORDER BY c.category_name
+	 </select>
+	 
+	 
+	<delete id="deleteCategory" parameterType="int" >
+		DELETE 
+		FROM category 
+		WHERE category_no = #{categoryNo}
+	</delete>
+	
+	<!-- SQL : SELECT ROW Count -->	 
+	 <select  id="getTotalCount"  parameterType="search"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(
+	  			SELECT category_no, category_name 
+				FROM category
+				ORDER BY category_name
+	  		) countTable						
+	 </select>
+	 
+</mapper>

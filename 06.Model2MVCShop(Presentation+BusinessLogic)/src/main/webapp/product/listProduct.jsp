@@ -13,6 +13,32 @@ function fncGetProductList(currentPage) {
 	document.getElementById("currentPage").value = currentPage;
    	document.detailForm.submit();		
 }
+
+function fncGetProductListByCategory(category) {
+	document.getElementById("currentPage").value = 1;
+	document.getElementById("categoryNo").value = category;
+   	document.detailForm.submit();		
+}
+
+function clearInput(){
+	document.getElementById("textInput1").value = null;
+	document.getElementById("textInput2").value = null;
+}
+
+function changeSearchkeyword2(){
+	var searchCondition = document.getElementById("searchCondition");
+	var selectValue = searchCondition.options[searchCondition.selectedIndex].value;
+	console.log("selectValue : " + selectValue);
+	var searchKeyword2 = document.getElementById("searchKeyword2");
+	if(selectValue == 2 && searchKeyword2.style.display == 'none'){
+		searchKeyword2.style.display = 'inline';
+		clearInput();
+	}else if(selectValue != 2 && searchKeyword2.style.display == 'inline'){
+		searchKeyword2.style.display = 'none';
+		clearInput();
+	}
+	
+}
 </script>
 </head>
 
@@ -44,31 +70,30 @@ function fncGetProductList(currentPage) {
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
-		<c:if test="${ !empty search.searchCondition }">
-			<td align="right">
-				<select name="searchCondition" class="ct_input_g" style="width:80px">
-					<c:if test="${(!empty user) && (user.role == 'manager' || user.role == 'admin') }">
-					<option value="0" ${search.searchCondition.equals("0")? "selected" : "" } >상품번호</option>
-					</c:if>
-					<option value="1" ${search.searchCondition.equals("1")? "selected" : "" } >상품명</option>
-					<option value="2" ${search.searchCondition.equals("2")? "selected" : "" } >상품가격</option>
-				</select>
-				<input 	type="text" name="searchKeyword"  value="${search.searchKeyword }" 
-								class="ct_input_g" style="width:200px; height:19px" >
-			</td>
-		</c:if>
-		<c:if test="${empty search.searchCondition }">
 		<td align="right">
-			<select name="searchCondition" class="ct_input_g" style="width:80px">
-				<c:if test="${(!empty user) && (user.role == 'manager' || user.role == 'admin') }">
-				<option value="0">상품번호</option>
-				</c:if>
-				<option value="1">상품명</option>
-				<option value="2">상품가격</option>
+			<select name="orderStandard"  class="ct_input_g" style="width:100px">
+				<option value="regDate" ${ search.orderStandard.equals("regDate") ? "selected" : "" }>상품 등록일</option>
+				<option value="lowPrice" ${ search.orderStandard.equals("lowPrice") ? "selected" : "" }>가격 낮은순</option>
+				<option value="highPrice" ${ search.orderStandard.equals("highPrice") ? "selected" : "" }>가격 높은순</option>
 			</select>
-			<input type="text" name="searchKeyword"  class="ct_input_g" style="width:200px; height:19px" >
+			<select name="searchCondition" id="searchCondition" class="ct_input_g" style="width:80px" onchange="changeSearchkeyword2()">
+				<c:if test="${(!empty user) && (user.role == 'manager' || user.role == 'admin') }">
+				<option value="0" ${!empty search.searchCondition 
+												&& search.searchCondition.equals("0")? "selected" : "" } >상품번호</option>
+				</c:if>
+				<option value="1" ${!empty search.searchCondition 
+												&& search.searchCondition.equals("1")? "selected" : "" } >상품명</option>
+				<option value="2" ${!empty search.searchCondition 
+												&& search.searchCondition.equals("2")? "selected" : "" } >상품가격</option>
+			</select>
+			<input 	type="text" id="textInput1"  name="searchKeyword"  value="${search.searchKeyword }" 
+							class="ct_input_g" style="width:200px; height:19px" >
+			<div id="searchKeyword2" style="display:${!empty search.searchCondition 
+												&& search.searchCondition.equals('2')? 'inline' : 'none'}">
+				~ <input 	type="text" id="textInput2"  name="priceRange"  value="${search.priceRange }" 
+								class="ct_input_g" style="width:200px; height:19px" >
+			</div>
 		</td>
-		</c:if>
 		<td align="right" width="70">
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
@@ -86,6 +111,11 @@ function fncGetProductList(currentPage) {
 		</td>
 	</tr>
 </table>
+카테고리
+<input type="hidden" name="categoryNo" id="categoryNo"/>
+<c:forEach var="category" items="${categoryList }">
+	 | <a href="javascript:fncGetProductListByCategory(${category.categoryNo })">${category.categoryName }</a>
+</c:forEach>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px;">
 	<tr>
@@ -99,6 +129,8 @@ function fncGetProductList(currentPage) {
 		<td class="ct_list_b" width="150">가격</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">등록일</td>
+		<td class="ct_line02"></td>
+		<td class="ct_list_b" width="150">카테고리</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b">현재상태</td>		
 	</tr>
@@ -123,6 +155,8 @@ function fncGetProductList(currentPage) {
 			<td align="left">${product.price}</td>
 			<td></td>
 			<td align="left">${product.regDate }</td>
+			<td></td>
+			<td align="left">${product.category.categoryName }</td>
 			<td></td>
 			<td align="left">
 			<c:if test="${(!empty user) && (user.role == 'manager' || user.role == 'admin') }">

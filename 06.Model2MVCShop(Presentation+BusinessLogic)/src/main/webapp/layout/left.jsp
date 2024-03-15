@@ -54,12 +54,17 @@ function history(){
 			<table  border="0" cellspacing="0" cellpadding="0" width="159">
 				<tr>
 					<td class="Depth03">
-						<a href="../product/addProductView.jsp;" target="rightFrame">판매상품등록</a>
+						<a href="/addProductView.do" target="rightFrame">판매상품등록</a>
 					</td>
 				</tr>
 				<tr>
 					<td class="Depth03">
 						<a href="/listProduct.do?menu=manage"  target="rightFrame">판매상품관리</a>
+					</td>
+				</tr>
+				<tr>
+					<td class="Depth03">
+						<a href="/listCategory.do"  target="rightFrame">카테고리 관리</a>
 					</td>
 				</tr>
 				<tr>

@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.category.CategoryService;
+import com.model2.mvc.service.domain.Category;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 
@@ -30,6 +33,10 @@ public class ProductController {
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
 	
+	@Autowired
+	@Qualifier("categoryServiceImpl")
+	private CategoryService categoryService;
+	
 	public ProductController() {
 		System.out.println(this.getClass());
 	}
@@ -38,15 +45,22 @@ public class ProductController {
 	@Value("#{commonProperties['pageSize']}") private int pageSize;
 	
 	@GetMapping("/addProductView.do")
-	public String addproductView() throws Exception {
+	public String addproductView(Model model) throws Exception {
+		Map<String, Object> map =  categoryService.getCategoryList();
+		model.addAttribute("list",map.get("list"));
+		System.out.println(map.get("list"));
+		
 		return "forward:/product/addProductView.jsp";
 	}
 	
 	@PostMapping("/addProduct.do")
-	public String addProduct(@ModelAttribute("product") Product product, Model model) throws Exception {
+	public String addProduct(@ModelAttribute("product") Product product, 
+														@RequestParam("productCategory") int categoryNo, Model model) throws Exception {
 		
-		System.out.println(product);
 		product.setManuDate(product.getManuDate().replace("-", ""));
+		Category category = new Category();
+		category.setCategoryNo(categoryNo);
+		product.setCategory(category);
 		productService.addProduct(product);
 		model.addAttribute(product);
 		
@@ -54,13 +68,14 @@ public class ProductController {
 	}
 	
 	@RequestMapping("/listProduct.do")
-	public String listProduct( @ModelAttribute("search") Search search, Model model, @Param("menu") String menu) throws Exception {
+	public String listProduct( @ModelAttribute("search") Search search, Model model, 
+			@RequestParam("menu") String menu, @RequestParam(value = "categoryNo" , required = false) Integer categoryNo) throws Exception {
 		
 		if(search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
-		if(search.getSearchKeyword() != null && !search.getSearchKeyword().equals("")) {
+		if(search.getSearchKeyword() != null && search.getSearchKeyword().equals("1")) {
 			search.setSearchKeyword('%' + search.getSearchKeyword() + '%');
 		}
 		

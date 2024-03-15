@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
     
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
 <head>
 <title>상품등록</title>
@@ -140,6 +142,21 @@ function resetData(){
 		<td class="ct_write01">
 			<input		type="text" name="fileName" class="ct_input_g" 
 							style="width: 200px; height: 19px" maxLength="13"/>
+		</td>
+	</tr>
+	<tr>
+		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
+	</tr>
+	<tr>
+		<td width="104" class="ct_write">상품 카테고리</td>
+		<td bgcolor="D6D6D6" width="1"></td>
+		<td class="ct_write01">
+			<select name="productCategory"  class="ct_input_g" >
+				<option value = "0">카테고리 선택</option>
+				<c:forEach var="category" items="${list }">
+					<option value = "${category.categoryNo }"> ${category.categoryName }</option>
+				</c:forEach>
+			</select>
 		</td>
 	</tr>
 	<tr>
