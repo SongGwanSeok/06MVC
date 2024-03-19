@@ -16,16 +16,16 @@
 		<result property="fileName" 			column="image_file" 		jdbcType="VARCHAR" />
 		<result property="regDate" 			column="reg_date" 				jdbcType="DATE" />
 		<result property="proTranCode" column="tran_code"			jdbcType="VARCHAR" />
-		<association property="category" javaType="category">
-			<result property="categoryName" 			column="category_name" 			jdbcType="NUMERIC"/>
-		</association>
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
-	<insert 	id="addProduct"		parameterType="product" >
+	<insert 	id="addProduct"	parameterType="product" >
 	 	INSERT
-		INTO product ( prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date, category_no ) 
-		VALUES	 (	SEQ_PRODUCT_PROD_NO.NEXTVAL , #{prodName}, #{prodDetail}, #{manuDate}, #{price}, #{fileName}, SYSDATE , #{category.categoryNo})
+		INTO product ( prod_no, prod_name, prod_detail, manufacture_day, price, image_file, reg_date ) 
+		VALUES	 (	SEQ_PRODUCT_PROD_NO.NEXTVAL , #{prodName}, #{prodDetail}, #{manuDate}, #{price}, #{fileName}, SYSDATE )
+	 	<selectKey keyProperty="prodNo" resultType="int" order="AFTER">
+			SELECT SEQ_PRODUCT_PROD_NO.CURRVAL FROM DUAL
+		</selectKey>
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
@@ -54,38 +54,37 @@
 	<select  id="getProductList"  parameterType="map"	resultMap="productSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT p.prod_no, p.prod_name , p.price , p.reg_date, TRIM(t.tran_status_code) tran_code, c.category_name
-											FROM product p, transaction t, category c
+	  					FROM		(	SELECT p.prod_no, p.prod_name , p.price , p.reg_date, TRIM(t.tran_status_code) tran_code
+											FROM product p, transaction t
 											WHERE p.prod_no = t.prod_no(+)
-											AND p.category_no = c.category_no
-											<if test="search.searchCondition != null">
-												<if test="search.searchCondition == 0 and search.searchKeyword !='' ">
+											<if test="searchCondition != null">
+												<if test="searchCondition == 0 and searchKeyword !='' ">
 										 				AND p.prod_no = #{search.searchKeyword}
 												</if>
-												<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
+												<if test="searchCondition == 1 and searchKeyword !='' ">
 										 				AND p.prod_name LIKE #{search.searchKeyword}
 												</if>
-												<if test="search.searchCondition == 2 and search.searchKeyword !='' and search.priceRange!='' ">
-										 				AND p.price BETWEEN #{search.searchKeyword} AND #{search.priceRange}
+												<if test="searchCondition == 2 and searchKeyword !='' and priceRange!='' ">
+										 				AND p.price = #{search.searchKeyword} AND #{search.priceRange}
 												</if>
 											</if>
 											
 											<if test="categoryNo != 0">
-												 AND p.category_no=#{categoryNo}
+												AND c.category_no = #{categoryNo}
 											</if>
 											
-											<if test="search.orderStandard != null">
-												<if test="search.orderStandard == 'regDate' ">
+											<if test="orderStandard != null">
+												<if test="orderStandard == 'regDate' ">
 													ORDER BY p.reg_date
 												</if>
-												<if test="search.orderStandard == 'lowPrice' ">
+												<if test="orderStandard == 'lowPrice' ">
 													ORDER BY p.price
 												</if>
-												<if test="search.orderStandard == 'highPrice' ">
+												<if test="orderStandard == 'highPrice' ">
 													ORDER BY p.price DESC
 												</if>
 											</if>
-											<if test="search.orderStandard == null">
+											<if test="orderStandard == null">
 												ORDER BY p.reg_date
 											</if>
 											 ) inner_table
@@ -107,7 +106,7 @@
 										 				AND p.prod_name LIKE #{searchKeyword}
 													</if>
 													<if test="searchCondition == 2 and searchKeyword !='' and priceRange!='' ">
-										 				AND p.price BETWEEN #{searchKeyword} AND #{priceRange}
+										 				AND p.price = #{searchKeyword} AND #{priceRange}
 													</if>
 											</if>
 											
