@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService{
 
 	public Map<String , Object > getProductList(Search search, int categoryNo) throws Exception {
 		List<Product> list= productDao.getProductList(search, categoryNo);
-		int totalCount = productDao.getTotalCount(search);
+		int totalCount = productDao.getTotalCount(search, categoryNo);
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list );

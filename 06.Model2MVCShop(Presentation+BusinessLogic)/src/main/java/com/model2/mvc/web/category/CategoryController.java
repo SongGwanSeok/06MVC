@@ -26,21 +26,21 @@ public class CategoryController {
 		System.out.println(this.getClass());
 	}
 	
-	@PostMapping("/addCategory.do")
+	@PostMapping("/addCategory")
 	public String addCategory(@ModelAttribute("category") Category category) throws Exception {
 		categoryService.addCategory(category);
 		
-		return "forward:/listCategory.do";
+		return "forward:/listCategory";
 	}
 
-	@GetMapping("/deleteCategory.do")
+	@GetMapping("/deleteCategory")
 	public String deleteCategory(@RequestParam int categoryNo) throws Exception {
 		categoryService.deleteCategory(categoryNo);
 		
-		return "forward:/listCategory.do";
+		return "forward:/listCategory";
 	}
 	
-	@RequestMapping("/listCategory.do")
+	@RequestMapping("/listCategory")
 	public String listCategory(Model model) throws Exception{
 		Map<String, Object> map = categoryService.getCategoryList();
 		model.addAttribute("list", map.get("list"));
@@ -48,7 +48,7 @@ public class CategoryController {
 		return "forward:/category/viewCategory.jsp";
 	}
 	
-	@PostMapping("/updateCategory.do")
+	@PostMapping("/updateCategory")
 	public String updateCategory(@RequestParam("fcategoryNo")int categoryNo, 
 															@RequestParam("newCategoryName") String newCategoryName) throws Exception{
 		Category category = new Category();
@@ -56,6 +56,6 @@ public class CategoryController {
 		category.setCategoryName(newCategoryName);
 		categoryService.updateCategory(category);
 		
-		return "forward:/listCategory.do";
+		return "forward:/listCategory";
 	}
 }

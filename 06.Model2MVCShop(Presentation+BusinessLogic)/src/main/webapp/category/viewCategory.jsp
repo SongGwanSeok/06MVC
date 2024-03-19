@@ -27,7 +27,7 @@
 	
 	function confirmDelete(categoryNo) {
 	    if (confirm("정말로 삭제하시겠습니까?")) {
-	        window.location.href = "/deleteCategory.do?categoryNo=" + categoryNo;
+	        window.location.href = "/deleteCategory?categoryNo=" + categoryNo;
 	    } 
 	}
 </script>
@@ -55,7 +55,7 @@
 	</tr>
 </table>
 
-<form name="categoryUpdateForm" id="categoryUpdateForm" action="/updateCategory.do" method="post">
+<form name="categoryUpdateForm" id="categoryUpdateForm" action="/updateCategory" method="post">
 	<input type="hidden" name = "fcategoryNo" id="fcategoryNo"/>
 	<input type="hidden" name="newCategoryName" id="newCategoryName"/>
 </form>
@@ -108,7 +108,7 @@
 <hr/>
 <h2> 카테고리 추가 </h2>
 
-<form name="categoryForm" id="categoryForm" action="/addCategory.do" method="post">
+<form name="categoryForm" id="categoryForm" action="/addCategory" method="post">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
 	<tr>
 		<td width="53%">

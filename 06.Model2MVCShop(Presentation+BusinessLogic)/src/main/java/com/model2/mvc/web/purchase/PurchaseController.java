@@ -44,7 +44,7 @@ public class PurchaseController {
 	@Value("#{commonProperties['pageSize']}") private int pageSize;
 	
 	
-	@PostMapping("/addPurchase.do")
+	@PostMapping("/addPurchase")
 	public ModelAndView addPurchase(@ModelAttribute("purchase")Purchase purchase, @RequestParam("prodNo") int prodNo,
 						@SessionAttribute(name ="user", required = false) User user) throws Exception {
 		Product product = new Product();
@@ -61,7 +61,7 @@ public class PurchaseController {
 		return mv;
 	}
 	
-	@GetMapping("/addPurchaseView.do")
+	@GetMapping("/addPurchase")
 	public ModelAndView addPurchaseView(@RequestParam("prodNo") int prodNo, Model model) throws Exception {
 		
 		Product product = productService.getProduct(prodNo);
@@ -72,7 +72,7 @@ public class PurchaseController {
 		return mv;
 	}
 	
-	@RequestMapping("/getPurchase.do")
+	@RequestMapping("/getPurchase")
 	public ModelAndView getPurchaseAction(@RequestParam("tranNo") int tranNo, Model model) throws Exception {
 		
 		Purchase purchase = purchaseService.getPurchase(tranNo);
@@ -84,7 +84,7 @@ public class PurchaseController {
 		return mv;
 	}
 	
-	@RequestMapping("/listPurchase.do")
+	@RequestMapping("/listPurchase")
 	public ModelAndView listPurchase(@SessionAttribute(name ="user", required = false) User user,
 														@ModelAttribute("search") Search search, Model model) throws Exception {
 		
@@ -92,7 +92,7 @@ public class PurchaseController {
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
-		System.out.println("listPurchase.do / search ==> " + search);
+		System.out.println("listPurchase / search ==> " + search);
 		
 		Map<String, Object> map = purchaseService.getPurchaseList(search, user.getUserId());
 		
@@ -108,18 +108,18 @@ public class PurchaseController {
 		return mv;
 	}
 	
-	@PostMapping("/updatePurchase.do")
+	@PostMapping("/updatePurchase")
 	public ModelAndView updatePurchase (@ModelAttribute("purchase")Purchase purchase) throws Exception {
 			
 		purchaseService.updatePurchase(purchase);
 		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("forward:/getPurchase.do");
+		mv.setViewName("forward:/getPurchase");
 		
 		return mv;
 	}
 	
-	@GetMapping("/updatePurchaseView.do")
+	@GetMapping("/updatePurchase")
 	public ModelAndView updatePurchaseView(@RequestParam("tranNo") int tranNo, Model model) throws Exception {
 		
 		Purchase purchase = purchaseService.getPurchase(tranNo);
@@ -132,19 +132,19 @@ public class PurchaseController {
 		return mv;
 	}
 	
-	@GetMapping("/updateTranCode.do")
+	@GetMapping("/updateTranCode")
 	public ModelAndView updateTranCode(@ModelAttribute("purchase")Purchase purchase) throws Exception {
 		
 		purchaseService.updateTranCode(purchase);
 		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("forward:/listPurchase.do");
+		mv.setViewName("forward:/listPurchase");
 		mv.addObject("purchase", purchase);
 		
 		return mv;
 	}
 	
-	@GetMapping("/updateTranCodeByProd.do")
+	@GetMapping("/updateTranCodeByProd")
 	public ModelAndView updateTranCodeByProd(@RequestParam("prodNo") int prodNo, @RequestParam("tranCode") String tranCode) throws Exception {
 		Product product = new Product();
 		product.setProdNo(prodNo);
@@ -155,7 +155,7 @@ public class PurchaseController {
 		purchaseService.updateTranCodeByProd(purchase);
 		
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("forward:/listProduct.do?menu=manage");
+		mv.setViewName("forward:/listProduct?menu=manage");
 		
 		return mv;
 	}

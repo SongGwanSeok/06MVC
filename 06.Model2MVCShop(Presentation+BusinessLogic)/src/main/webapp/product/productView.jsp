@@ -94,8 +94,7 @@
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tbody><tr>
 					<td height="26">
-						${product.fileName }
-						<img src="/images/uploadFiles/../../images/empty.GIF">
+						<img src="/images/uploadFiles/${product.prodNo }_${product.fileName }">
 					</td>
 				</tr>
 			</tbody></table>

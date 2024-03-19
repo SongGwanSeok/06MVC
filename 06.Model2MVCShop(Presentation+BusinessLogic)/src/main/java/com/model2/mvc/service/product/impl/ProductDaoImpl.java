@@ -49,11 +49,15 @@ public class ProductDaoImpl implements ProductDao{
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("search", search);
 		map.put("categoryNo", categoryNo);
+		System.out.println("productDaoImpl ==> " + search.getSearchKeyword());
 		return sqlSession.selectList("ProductMapper.getProductList", map);
 	}
 
 	// 게시판 Page 처리를 위한 전체 Row(totalCount)  return
-	public int getTotalCount(Search search) throws Exception {
-		return sqlSession.selectOne("ProductMapper.getTotalCount", search);
+	public int getTotalCount(Search search, int categoryNo) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("search", search);
+		map.put("categoryNo", categoryNo);
+		return sqlSession.selectOne("ProductMapper.getTotalCount", map);
 	}
 }

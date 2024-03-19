@@ -96,7 +96,7 @@ public class ProductController {
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
-		if(search.getSearchKeyword() != null && search.getSearchKeyword().equals("1")) {
+		if(search.getSearchKeyword() != null && search.getSearchCondition().equals("1")) {
 			search.setSearchKeyword('%' + search.getSearchKeyword() + '%');
 		}
 		if(categoryNo == null) {
@@ -131,7 +131,7 @@ public class ProductController {
 		model.addAttribute("product", product);
 		
 		if(menu.equals("manage")) {
-			return "forward:/updateProductView.do";
+			return "forward:/updateProduct";
 		}else if(menu.equals("search")){
 //			recent = URLDecoder.decode(recent, "euc-kr");
 			if(recent == null) {
