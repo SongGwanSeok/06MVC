@@ -16,6 +16,10 @@
 		<result property="fileName" 			column="image_file" 		jdbcType="VARCHAR" />
 		<result property="regDate" 			column="reg_date" 				jdbcType="DATE" />
 		<result property="proTranCode" column="tran_code"			jdbcType="VARCHAR" />
+		<association property="category" javaType="category">
+			<result property="categoryNo" 			column="category_no" 			jdbcType="NUMERIC"/>
+			<result property="categoryName"	column="category_name" 	jdbcType="VARCHAR" />
+		</association>
 	</resultMap>
 	
 	<!-- SQL : INSERT -->
@@ -29,12 +33,13 @@
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
-	 <select 	id="getProduct"	parameterType="int"	resultMap="productSelectMap">
+	 <select 	id="getProduct"	parameterType="map"	resultMap="productSelectMap">
 		SELECT
-		p.prod_no , p.prod_name , p.prod_detail , p.manufacture_day ,  p.price ,  p.image_file , p.reg_date, TRIM(t.tran_status_code) tran_code 		
-		FROM product p,  transaction t
+		p.prod_no , p.prod_name , p.prod_detail , p.manufacture_day ,  p.price ,  p.image_file , p.reg_date, TRIM(t.tran_status_code) tran_code, c.category_no, c.category_name
+		FROM product p,  transaction t, category c
 		WHERE p.prod_no = t.prod_no(+)
 		AND p.prod_no = #{prodNo}
+		AND p.category_no = c.category_no
 	 </select>
 	 
 	 <!-- SQL : UPDATE -->

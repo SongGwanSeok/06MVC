@@ -57,10 +57,12 @@ public class ProductRestController {
 	}
 	
 	@PostMapping("updateProduct")
-	public String updateProduct(@ModelAttribute Product product) throws Exception {
+	public String updateProduct(@RequestBody Product product) throws Exception {
+		System.out.println("/user/updateProduct ==> " + product);
 		try {
 			productService.updateProduct(product);
 		}catch(Exception e) {
+			System.out.println(e);
 			return failMsg;
 		}
 		return successMsg;

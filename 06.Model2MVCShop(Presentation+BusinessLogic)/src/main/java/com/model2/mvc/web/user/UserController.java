@@ -96,7 +96,7 @@ public class UserController {
 			session.setAttribute("user", user);
 		}
 		
-		return "redirect:/getUser.do?userId="+user.getUserId();
+		return "redirect:/user/getUser?userId="+user.getUserId();
 	}
 	
 	@RequestMapping( value="login", method=RequestMethod.GET )

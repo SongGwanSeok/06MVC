@@ -2,6 +2,8 @@ package com.model2.mvc.service.domain;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 public class Product {
 	

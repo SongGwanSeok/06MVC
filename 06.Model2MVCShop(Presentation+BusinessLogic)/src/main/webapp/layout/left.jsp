@@ -37,6 +37,54 @@
 				//alert(  $( ".Depth03:contains('회원정보조회')" ) );
 		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/user/listUser");
 			}); 
+			
+		 	//==> 판매상품등록 Event 연결처리부분
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		 	$( ".Depth03:contains('판매상품등록')" ).on("click" , function() {
+				//Debug..
+				//alert(  $( ".Depth03:contains('판매상품등록')" ) );
+		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/addProduct");
+			}); 
+			
+		 	//==> 판매상품관리 Event 연결처리부분
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		 	$( ".Depth03:contains('판매상품관리')" ).on("click" , function() {
+				//Debug..
+				//alert(  $( ".Depth03:contains('판매상품관리')" ) );
+		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/listProduct?menu=manage");
+			}); 
+			
+		 	//==> 카테고리관리 Event 연결처리부분
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		 	$( ".Depth03:contains('카테고리관리')" ).on("click" , function() {
+				//Debug..
+				//alert(  $( ".Depth03:contains('카테고리관리')" ) );
+		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/listCategory");
+			}); 
+			
+		 	//==> 상품검색 Event 연결처리부분
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		 	$( ".Depth03:contains('상 품 검 색')" ).on("click" , function() {
+				//Debug..
+				//alert(  $( ".Depth03:contains('상 품 검 색')" ) );
+		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/listProduct?menu=search");
+			}); 
+			
+		 	//==> 구매이력조회 Event 연결처리부분
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		 	$( ".Depth03:contains('구매이력조회')" ).on("click" , function() {
+				//Debug..
+				//alert(  $( ".Depth03:contains('구매이력조회')" ) );
+		 		$(window.parent.frames["rightFrame"].document.location).attr("href","/listPurchase");
+			}); 
+			
+		 	//==> 최근 본 상품 Event 연결처리부분
+			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		 	$( ".Depth03:contains('최근 본 상품')" ).on("click" , function() {
+				//Debug..
+				//alert(  $( ".Depth03:contains('최근 본 상품')" ) );
+		 		history();
+			}); 
 		});	
 		 
 	</script>
@@ -82,17 +130,20 @@
 			<table  border="0" cellspacing="0" cellpadding="0" width="159">
 				<tr>
 					<td class="Depth03">
-						<a href="/addProduct" target="rightFrame">판매상품등록</a>
+						<!-- <a href="/addProduct" target="rightFrame">판매상품등록</a> -->
+						판매상품등록
 					</td>
 				</tr>
 				<tr>
 					<td class="Depth03">
-						<a href="/listCategory"  target="rightFrame">카테고리 관리</a>
+						<!-- <a href="/listProduct?menu=manage"  target="rightFrame">판매상품관리</a> -->
+						판매상품관리
 					</td>
 				</tr>
 				<tr>
 					<td class="Depth03">
-						<a href="/listProduct?menu=manage"  target="rightFrame">판매상품관리</a>
+						<!-- <a href="/listCategory"  target="rightFrame">카테고리 관리</a> -->
+						카테고리관리
 					</td>
 				</tr>
 				<tr>
@@ -109,14 +160,16 @@
 		<table  border="0" cellspacing="0" cellpadding="0" width="159">
 			<tr>
 				<td class="Depth03">
-					<a href="/listProduct?menu=search" target="rightFrame">상 품 검 색</a>
+					<!-- <a href="/listProduct?menu=search" target="rightFrame">상 품 검 색</a> -->
+					상 품 검 색
 				</td>
 			</tr>
 			
 			<c:if test="${ !empty user && user.role == 'user'}">
 			<tr>
 				<td class="Depth03">
-					<a href="/listPurchase"  target="rightFrame">구매이력조회</a>
+					<!--  <a href="/listPurchase"  target="rightFrame">구매이력조회</a> -->
+					구매이력조회
 				</td>
 			</tr>
 			</c:if>
@@ -125,7 +178,10 @@
 				<td class="DepthEnd">&nbsp;</td>
 			</tr>
 			<tr>
-				<td class="Depth03"><a href="javascript:history()">최근 본 상품</a></td>
+				<td class="Depth03">
+					<!-- <td class="Depth03"><a href="javascript:history()">최근 본 상품</a></td> -->
+					최근 본 상품
+				</td>
 			</tr>
 		</table>
 	</td>
