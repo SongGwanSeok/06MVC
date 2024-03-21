@@ -70,7 +70,7 @@
 										 				AND p.prod_name LIKE #{search.searchKeyword}
 												</if>
 												<if test="search.searchCondition == 2 and search.searchKeyword !='' and search.priceRange!='' ">
-										 				AND p.price = #{search.searchKeyword} AND #{search.priceRange}
+										 				AND p.price BETWEEN #{search.searchKeyword} AND #{search.priceRange}
 												</if>
 											</if>
 											
@@ -111,7 +111,7 @@
 										 				AND p.prod_name LIKE #{search.searchKeyword}
 												</if>
 												<if test="search.searchCondition == 2 and search.searchKeyword !='' and search.priceRange!='' ">
-										 				AND p.price = #{search.searchKeyword} AND #{search.priceRange}
+										 				AND p.price BETWEEN #{search.searchKeyword} AND #{search.priceRange}
 												</if>
 											</if>
 											

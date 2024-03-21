@@ -12,22 +12,27 @@
 <script type="text/javascript">
 	
 	function fncAddCategory() {
-		document.getElementById('categoryForm').submit();
+		$('#categoryForm').submit();
+		// document.getElementById('categoryForm').submit();
 	}
 	
 	function fucUpdateCategory(fcategoryNo) {
 		var newCategoryName = prompt("변경 할 카테고리 이름을 입력하세요.", "");
 	    if (newCategoryName !== null) {
 	        console.log(newCategoryName + fcategoryNo);
-	        document.getElementById("fcategoryNo").value = fcategoryNo;
-	        document.getElementById('newCategoryName').value = newCategoryName;
-	        document.getElementById('categoryUpdateForm').submit();
+	        $('fcategoryNo').val(fcategoryNo);
+	        $('newCategoryName').val(newCategoryName);
+	        $('categoryUpdateForm').submit();
+	        //document.getElementById("fcategoryNo").value = fcategoryNo;
+	        //document.getElementById('newCategoryName').value = newCategoryName;
+	        //document.getElementById('categoryUpdateForm').submit();
 	    }
 	}
 	
 	function confirmDelete(categoryNo) {
 	    if (confirm("정말로 삭제하시겠습니까?")) {
-	        window.location.href = "/deleteCategory?categoryNo=" + categoryNo;
+	        //window.location.href = "/deleteCategory?categoryNo=" + categoryNo;
+	    	$(location).attr("href", "/deleteCategory?categoryNo=" + categoryNo);
 	    } 
 	}
 </script>

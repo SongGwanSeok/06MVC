@@ -12,6 +12,7 @@
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 function fncAddProduct(){
 	//Form 유효성 검증
@@ -37,8 +38,7 @@ function fncAddProduct(){
 		return;
 	}
 
-	document.detailForm.action='/addProduct';
-	document.detailForm.submit();
+	$("form").attr("method" , "POST").attr("action" , "/addProduct").submit();
 }
 
 function resetData(){

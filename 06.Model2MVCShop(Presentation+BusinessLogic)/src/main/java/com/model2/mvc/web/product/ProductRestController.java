@@ -17,15 +17,15 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.product.ProductService;
 
 @RestController
-@RequestMapping("/product/*")
+@RequestMapping("/product/json/*")
 public class ProductRestController {
 	
 	@Autowired
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
 
-	private final String successMsg = "성공";
-	private final String failMsg = "실패";
+	private final String successMsg = "success";
+	private final String failMsg = "fail";
 	
 	public ProductRestController() {
 		System.out.println(this.getClass());
@@ -50,7 +50,13 @@ public class ProductRestController {
 	}
 	
 	@GetMapping("getProductList")
-	public Object getProductList(@ModelAttribute Search search, int categoryNo) throws Exception {
+	public Object getProductList(@ModelAttribute Search search, Integer categoryNo) throws Exception {
+		
+		if(categoryNo == null) {
+			categoryNo = 0;
+		}
+		System.out.println(categoryNo);
+		
 		Map<String, Object> map = productService.getProductList(search, categoryNo);
 		
 		return map.get("list");

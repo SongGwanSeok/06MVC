@@ -118,6 +118,7 @@ public class ProductController {
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 		model.addAttribute("menu", menu);
+		System.out.println("listProduct ==> " + search);
 		
 		return "forward:/product/listProduct.jsp";
 	}

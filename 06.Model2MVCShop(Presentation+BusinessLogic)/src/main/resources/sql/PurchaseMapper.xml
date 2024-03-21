@@ -89,9 +89,9 @@
 																	AND t.prod_no = p.prod_no
 																	AND t.buyer_id = #{userId}
 					 ) inner_table
-			        WHERE ROWNUM <= #{end}
+			        WHERE ROWNUM <= #{search.endRowNum}
 			    )
-			    WHERE row_seq BETWEEN #{start} AND #{end}			
+			    WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum}			
 			]]>
 	 </select>
 	
@@ -119,11 +119,14 @@
 	<!-- SQL : SELECT ROW Count -->	 
 	 <select  id="getTotalCount"  parameterType="hashMap"	 resultType="int">
 	 	SELECT COUNT(*)
-	  	FROM(SELECT t.prod_no, t.buyer_id, TRIM(t.payment_option) payment_option, 
-	  											u.user_name, u.cell_phone
-													FROM transaction t, users u
-													WHERE t.buyer_id = u.user_id
-													AND t.buyer_id = #{userId}
+	  	FROM(SELECT tran_no, t.prod_no, buyer_id, TRIM(payment_option) PAYMENT_OPTION, receiver_name,
+										receiver_phone, demailaddr, dlvy_request, TRIM(t.tran_status_code) TRAN_STATUS_CODE, 
+					 					order_data, TO_CHAR(dlvy_date, 'YYYYMMDD') DLVY_DATE, 
+					  											u.user_name, u.cell_phone, p.prod_name
+																	FROM transaction t, users u, product p
+																	WHERE t.buyer_id = u.user_id
+																	AND t.prod_no = p.prod_no
+																	AND t.buyer_id = #{userId}
 	  	) countTable
 	 </select>
 	 

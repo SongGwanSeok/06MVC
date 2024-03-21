@@ -8,37 +8,37 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+
 function fncGetProductList(currentPage) {
-	document.getElementById("currentPage").value = currentPage;
-   	document.detailForm.submit();		
+	$("#currentPage").val(currentPage);
+   	$("form[name='detailForm']").submit();
 }
 
 function fncGetProductListByCategory(category) {
-	document.getElementById("currentPage").value = 1;
-	document.getElementById("categoryNo").value = category;
-   	document.detailForm.submit();		
+	$("#currentPage").val(1);
+	$("#categoryNo").val(category);
+	$("form[name='detailForm']").submit();
 }
 
 function clearInput(){
-	document.getElementById("textInput1").value = null;
-	document.getElementById("textInput2").value = null;
+	$("#textInput1").val(null);
+	$("#textInput2").val(null);
 }
 
-function changeSearchkeyword2(){
-	var searchCondition = document.getElementById("searchCondition");
-	var selectValue = searchCondition.options[searchCondition.selectedIndex].value;
-	console.log("selectValue : " + selectValue);
-	var searchKeyword2 = document.getElementById("searchKeyword2");
-	if(selectValue == 2 && searchKeyword2.style.display == 'none'){
-		searchKeyword2.style.display = 'inline';
+$(function() {
+	$("select[name='searchCondition']").on("change", function() {
+		var selectValue = $("select[name='searchCondition'] option:selected").val();
+		console.log(selectValue);
+		if(selectValue == 2){
+			$('#searchKeyword2').css('display', 'inline');
+		}else{
+			$('#searchKeyword2').css('display', 'none');
+		}
 		clearInput();
-	}else if(selectValue != 2 && searchKeyword2.style.display == 'inline'){
-		searchKeyword2.style.display = 'none';
-		clearInput();
-	}
-	
-}
+	}).trigger( "change" );
+});
 </script>
 </head>
 
@@ -76,7 +76,7 @@ function changeSearchkeyword2(){
 				<option value="lowPrice" ${ search.orderStandard.equals("lowPrice") ? "selected" : "" }>가격 낮은순</option>
 				<option value="highPrice" ${ search.orderStandard.equals("highPrice") ? "selected" : "" }>가격 높은순</option>
 			</select>
-			<select name="searchCondition" id="searchCondition" class="ct_input_g" style="width:80px" onchange="changeSearchkeyword2()">
+			<select name="searchCondition" id="searchCondition" class="ct_input_g" style="width:80px">
 				<c:if test="${(!empty user) && (user.role == 'manager' || user.role == 'admin') }">
 				<option value="0" ${!empty search.searchCondition 
 												&& search.searchCondition.equals("0")? "selected" : "" } >상품번호</option>
@@ -101,7 +101,7 @@ function changeSearchkeyword2(){
 						<img src="/images/ct_btnbg01.gif" width="17" height="23">
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncGetProductList('1');">검색</a>
+						<a href="javascript:fncGetProductList('1');">검색</a> 
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23">

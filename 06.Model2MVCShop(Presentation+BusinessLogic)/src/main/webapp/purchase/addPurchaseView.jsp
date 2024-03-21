@@ -13,12 +13,11 @@
 <script type="text/javascript" src="../javascript/calendar.js">
 </script>
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-<!--
 function fncAddPurchase() {
-	document.addPurchase.submit();
+	$("form[name='addPurchase']").submit();
 }
--->
 </script>
 </head>
 

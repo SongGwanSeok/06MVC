@@ -9,10 +9,11 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
 	function fncGetPurchaseList(currentPage) {
-		document.getElementById("currentPage").value = currentPage;
-	   	document.detailForm.submit();	
+		$("#currentPage").val(currentPage);
+		$("form[name='detailForm']").submit();	
 	}
 </script>
 </head>

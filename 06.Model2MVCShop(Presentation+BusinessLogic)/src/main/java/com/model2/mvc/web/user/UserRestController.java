@@ -25,7 +25,7 @@ import com.model2.mvc.service.user.UserService;
 
 //==> 회원관리 RestController
 @RestController
-@RequestMapping("/user/*")
+@RequestMapping("/user/json/*")
 public class UserRestController {
 	
 	///Field
@@ -38,7 +38,7 @@ public class UserRestController {
 		System.out.println(this.getClass());
 	}
 	
-	@RequestMapping( value="json/getUser/{userId}", method=RequestMethod.GET )
+	@RequestMapping( value="getUser/{userId}", method=RequestMethod.GET )
 	public User getUser( @PathVariable String userId ) throws Exception{
 		
 		System.out.println("/user/json/getUser : GET");
@@ -47,7 +47,7 @@ public class UserRestController {
 		return userService.getUser(userId);
 	}
 
-	@RequestMapping( value="json/login", method=RequestMethod.POST )
+	@RequestMapping( value="login", method=RequestMethod.POST )
 	public User login(	@RequestBody User user,
 									HttpSession session ) throws Exception{
 	
