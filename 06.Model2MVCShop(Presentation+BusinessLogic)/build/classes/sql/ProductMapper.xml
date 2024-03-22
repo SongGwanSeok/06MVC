@@ -59,9 +59,10 @@
 	<select  id="getProductList"  parameterType="map"	resultMap="productSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT p.prod_no, p.prod_name , p.price , p.reg_date, TRIM(t.tran_status_code) tran_code
-											FROM product p, transaction t
+	  					FROM		(	SELECT p.prod_no, p.prod_name , p.price , p.reg_date, TRIM(t.tran_status_code) tran_code, c.category_no, c.category_name
+											FROM product p, transaction t, category c
 											WHERE p.prod_no = t.prod_no(+)
+											AND p.category_no = c.category_no
 											<if test="search.searchCondition != null">
 												<if test="search.searchCondition == 0 and search.searchKeyword !='' ">
 										 				AND p.prod_no = #{search.searchKeyword}

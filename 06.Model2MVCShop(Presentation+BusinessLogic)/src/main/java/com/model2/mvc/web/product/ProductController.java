@@ -36,7 +36,7 @@ public class ProductController {
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
 	
-//	private final String fileDir = "C:\\workspace\\07.Model2MVCShop(URI,pattern)\\src\\main\\webapp\\images\\uploadFiles\\"; 
+	private final String fileDir = "C:\\workspace\\07.Model2MVCShop(URI,pattern)\\src\\main\\webapp\\images\\uploadFiles\\"; 
 
 	
 	@Autowired
@@ -66,8 +66,11 @@ public class ProductController {
 														@RequestParam("productCategory") int categoryNo, 
 														Model model) throws Exception {
 		
-		String root = request.getServletContext().getRealPath("/images/uploadFiles")+ File.separator;
+		//String root = request.getServletContext().getRealPath("/images/uploadFiles")+ File.separator;
 		System.out.println("/addProduct" + product);
+		Category category = new Category();
+		category.setCategoryNo(categoryNo);
+		product.setCategory(category);
 		if(file.isEmpty()) {
 			product.setFileName("default.png");
 		}else {
@@ -78,7 +81,7 @@ public class ProductController {
 		
 		if (!file.isEmpty()) {
 			
-	        String fullPath = root + product.getProdNo() + "_" + file.getOriginalFilename();
+	        String fullPath = fileDir + product.getProdNo() + "_" + file.getOriginalFilename();
 	        System.out.println(fullPath);
 	        file.transferTo(new File(fullPath));
 	    }
