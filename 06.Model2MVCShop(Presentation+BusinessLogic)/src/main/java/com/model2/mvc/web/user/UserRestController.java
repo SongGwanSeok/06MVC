@@ -1,5 +1,6 @@
 package com.model2.mvc.web.user;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,4 +63,15 @@ public class UserRestController {
 		
 		return dbUser;
 	}
+	
+	@RequestMapping( value="findUserId", method=RequestMethod.GET)
+	public List<String> findUserId(@RequestParam String name) throws Exception{
+		
+		List<String> userList = userService.findUserIdList("%"+name+"%");
+//		System.out.println(userList);
+		
+		return userList;
+	}
+	
+	
 }

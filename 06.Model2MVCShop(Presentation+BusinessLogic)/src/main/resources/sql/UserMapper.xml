@@ -19,6 +19,7 @@
 		<result property="regDate" 		column="reg_date" 			jdbcType="DATE" />
 	</resultMap>
 	
+	
 	<!-- SQL : INSERT -->
 	<insert 	id="addUser"		parameterType="user" >
 	 	INSERT
@@ -93,6 +94,12 @@
 								</if>
 							</where>
 						</if> ) countTable						
+	 </select>
+	 
+	 <select id="findUserIdList" parameterType="string" resultType="string">
+	 	SELECT user_id
+	 	FROM users
+	 	where user_id like #{target}
 	 </select>
 	 
 </mapper>

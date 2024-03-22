@@ -1,5 +1,6 @@
 package com.model2.mvc.service.user.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,4 +64,9 @@ public class UserServiceImpl implements UserService{
 		}
 		return result;
 	}
+	
+	public List<String> findUserIdList(String target) throws Exception {
+		return userDao.findUserIdList(target);
+	}
+	
 }

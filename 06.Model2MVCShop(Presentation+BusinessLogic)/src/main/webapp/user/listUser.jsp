@@ -11,9 +11,12 @@
 	<title>회원 목록 조회</title>
 	
 	<link rel="stylesheet" href="/css/admin.css" type="text/css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  	<link rel="stylesheet" href="/resources/demos/style.css">
 	
 	<!-- CDN(Content Delivery Network) 호스트 사용 -->
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 	<script type="text/javascript">
 	
 		//=====기존Code 주석 처리 후  jQuery 변경 ======//
@@ -37,14 +40,48 @@
 				fncGetUserList(1);
 			});
 			
-			
 			//==> userId LINK Event 연결처리
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 			//==> 3 과 1 방법 조합 : $(".className tagName:filter함수") 사용함.
 			$( ".ct_list_pop td:nth-child(3)" ).on("click" , function() {
 					//Debug..
 					//alert(  $( this ).text().trim() );
-					self.location ="/user/getUser?userId="+$(this).text().trim();
+					
+					//////////////////////////// 추가 , 변경된 부분 ///////////////////////////////////
+					//self.location ="/user/getUser?userId="+$(this).text().trim();
+					////////////////////////////////////////////////////////////////////////////////////////////
+					var userId = $(this).text().trim();
+					$.ajax( 
+							{
+								url : "/user/json/getUser/"+userId ,
+								method : "GET" ,
+								dataType : "json" ,
+								headers : {
+									"Accept" : "application/json",
+									"Content-Type" : "application/json"
+								},
+								success : function(JSONData , status) {
+
+									//Debug...
+									//alert(status);
+									//Debug...
+									//alert("JSONData : \n"+JSONData);
+									
+									var displayValue = "<h3>"
+																+"아이디 : "+JSONData.userId+"<br/>"
+																+"이  름 : "+JSONData.userName+"<br/>"
+																+"이메일 : "+JSONData.email+"<br/>"
+																+"ROLE : "+JSONData.role+"<br/>"
+																+"등록일 : "+JSONData.regDateString+"<br/>"
+																+"</h3>";
+									//Debug...									
+									//alert(displayValue);
+									$("h3").remove();
+									$( "#"+userId+"" ).html(displayValue);
+								}
+						});
+						////////////////////////////////////////////////////////////////////////////////////////////
+					
 			});
 			
 			//==> UI 수정 추가부분  :  userId LINK Event End User 에게 보일수 있도록 
@@ -62,7 +99,33 @@
 			//console.log ( $(".ct_list_pop:nth-child(5)" ).html() ); 
 			//console.log ( $(".ct_list_pop:nth-child(6)" ).html() ); //==> ok
 			//console.log ( $(".ct_list_pop:nth-child(7)" ).html() ); 
+			
+			$('input[name="searchKeyword"]').on("change", function(){
+				console.log("searchKeyword input change event");
+				$.ajax( 
+						{
+							url : "/user/json/findUserId",
+							method : "GET" ,
+							dataType : "json" ,
+							headers : {
+								"Accept" : "application/json",
+								"Content-Type" : "application/json"
+							},
+							data : {
+								name : $(this).val()
+							},
+							success : function(JSONData , status) {
+								console.log(JSONData);
+								$('input[name="searchKeyword"]').autocomplete({
+								      source: JSONData
+								});
+							}
+					});
+				
+			});
 		});	
+		
+
 	</script>		
 	
 </head>
@@ -164,6 +227,12 @@
 			<td></td>
 			<td align="left">${user.email}
 			</td>		
+		</tr>
+		<tr>
+			<!-- //////////////////////////// 추가 , 변경된 부분 /////////////////////////////
+			<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+			////////////////////////////////////////////////////////////////////////////////////////////  -->
+			<td id="${user.userId}" colspan="11" bgcolor="D6D7D6" height="1"></td>
 		</tr>
 		<tr>
 		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
